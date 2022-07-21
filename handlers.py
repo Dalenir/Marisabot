@@ -53,7 +53,7 @@ async def trap_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext):
     await state.set_state(MarisaStates.sleepmode)
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
-    await answer_writer(int(query.data))
+    await answer_writer(int(query.data), query.from_user.id)
     await query.message.answer('Серьезно? А я бы дала себе 10 баллов.\n\nПритворюсь, что не слышала этого.'
                          '\nБудем считать это твоим первым ответом о настроении. А теперь прости,'
                          ' мне пора спать 12 часов, чтобы спросить тебя вновь...')
@@ -66,6 +66,7 @@ async def marisa_awaikens(message: Union[Message, None], bot: Bot):
         nmarkup.button(text=str(points), callback_data=str(points))
     nmarkup.adjust(3)
     for uid in bata.all_data().master:
+        print(uid)
         await bot.send_message(uid, 'Привет! Это я! Как ты себя чувствуешь?', reply_markup=nmarkup.as_markup())
 
 

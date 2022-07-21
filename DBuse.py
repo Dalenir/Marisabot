@@ -1,9 +1,5 @@
-from typing import Union
-
 import psycopg2
-from psycopg2 import sql
 from bata import all_data
-from datetime import datetime
 import os
 
 
@@ -16,7 +12,7 @@ async def data_getter(query):
                 data = cur.fetchall()
         conn.close()
         return data
-    except psycopg2.Error as error:
+    except Exception as error:
         print(error)
         return False
 
@@ -42,5 +38,6 @@ async def base_sentiency(points, old_points):
 
 
 async def time_watcher():
+    print('a')
     quer = 'SELECT time from public.stats ORDER BY id asc limit 1'
     return await data_getter(quer)
