@@ -24,9 +24,21 @@ async def data_getter(query):
 async def answer_writer(points, user):
     quer = f"""CREATE table IF NOT EXISTS public.stats (id serial, time timestamp, points int, user_id int);
             INSERT into public.stats (time, points, user_id) values
-            (current_timestamp, {int(points)}, {user}) returning id
+            (current_timestamp, {int(points)}, {user}) returning 
+            (select points from public.stats where user_id = {user} order by id desc limit 1) as before,
+            (SELECT lag(points, 1) over (order by id asc) from public.stats
+            WHERE user_id = {user} order by id desc limit 1) as long_before;
             """
-    await data_getter(quer)
+    old_points = (await data_getter(quer))[0]
+    print(old_points)
+    return old_points
+
+
+async def base_sentiency(points, old_points):
+    answer = str()
+    previous_points, more_older_points = old_points
+    if points > previous_points and points > 0:
+        pass
 
 
 async def time_watcher():
