@@ -33,8 +33,8 @@ async def main():
     bot_info = await bot.get_me()
     print(f"Hello, i'm {bot_info.first_name} | {bot_info.username}")
     dp.include_router(handlers.router)
-    # if await time_watcher():
-        # asyncio.create_task(periodic(timet=(await time_watcher())[0][0]))
+    if await time_watcher():
+        asyncio.create_task(periodic(timet=(await time_watcher())[0][0]))
     session = aiohttp.ClientSession()
     await session.close()
     await bot.delete_webhook(drop_pending_updates=True)
