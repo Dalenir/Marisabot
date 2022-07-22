@@ -1,19 +1,18 @@
-FROM ubuntu:latest
+FROM python:3.8
 
-LABEL version = '0.1'
+ENV PYTHONUNBUFFERED=1
+
+LABEL version = '0.2'
 LABEL master = 'Neveric'
 
-RUN apt-get update && apt-get upgrade -y
-
-RUN apt-get install python3 -y
-
-RUN apt-get install pip -y
+RUN mkdir /Snow
+WORKDIR /Snow
 
 COPY requirements.txt /tmp/
 RUN pip install --requirement /tmp/requirements.txt
 
-ADD ./* /Marisabot/
+COPY ./* /Snow/
 
 EXPOSE 696
 
-CMD [ "python3" , "./Marisabot/Marisabot.py" ]
+CMD ["Marisabot.py"]

@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  databasu:
+    image: postgres:14.4
+    container_name: Witch_stash
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5454:5432"
+  bot:
+    build: .
+    container_name: Marisa
+    command: bash -c 'python Marisabot.py'
+    depends_on:
+      - databasu
+      - redis
+    volumes:
+      - .:/Snow
+    network_mode: host
+  redis:
+    image: redis:7.0.4
+    container_name: Witch_garden
+    ports:
+      - "2769:2769"
+    command: --port 2769
