@@ -67,7 +67,11 @@ async def marisa_awaikens(message: Union[Message, None], bot: Bot):
     nmarkup.adjust(3)
     for uid in bata.all_data().master:
         print(uid)
-        await bot.send_message(uid, 'Привет! Это я! Как ты себя чувствуешь?', reply_markup=nmarkup.as_markup())
+        await bot.send_message(uid, 'Привет! Это я! Теперь у меня есть свой коробочный мир,'
+                                    ' а в нем свои сад и кладовка!\n'
+                                    'Честно говоря, я не отказалась'
+                                    ' бы от того, чтобы они были чуть надежнее, но и так неплохо!\n\n'
+                                    'А ты как?', reply_markup=nmarkup.as_markup())
 
 
 @router.callback_query((lambda call: int(call.data) in all_points), state=MarisaStates.sleepmode)
@@ -76,5 +80,6 @@ async def marisa_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext)
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     await answer_writer(int(query.data), query.from_user.id)
-    await query.message.answer('Я очень рада, что ты со мной поделился! Встретимся через 12 часов, а пока... '
-                               '\nGambare!')
+    await query.message.answer('...эх. Я сохраню твой ответ, хоть пока и не могу реагировать на него как-то'
+                               'по-особеннному. Но я слышала, что это входит в программу моего улучшения, так что'
+                               'ты, пожалуйста, не вешай нос -- все обязательно будет!')
