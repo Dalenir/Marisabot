@@ -21,4 +21,5 @@ jobs:
             echo WELCOME
             cd Marisabot
             sudo -S git pull
+            echo ${{ secrets.PASSWORD }}
             sudo -S docker compose -f Marisa_flight.yml build
