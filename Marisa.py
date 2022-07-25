@@ -4,14 +4,14 @@ import aiohttp
 
 import handlers
 from DBuse import time_watcher
-from bata import all_data
+from bata import AllData
 from aiogram import Dispatcher
 
 from aiogram.dispatcher.fsm.storage.redis import RedisStorage
 
 from marisa_log.scribe import witch_log
 
-data = all_data()
+data = AllData()
 bot = data.get_bot()
 storage = RedisStorage.from_url(data.redis_url)
 dp = Dispatcher(storage)

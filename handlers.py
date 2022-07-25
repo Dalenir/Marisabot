@@ -63,7 +63,7 @@ async def marisa_awaikens(message, bot: Bot):
     if message:
         await message.answer('Удачного теста!', reply_markup=nmarkup.as_markup())
     else:
-        for uid in bata.all_data().master:
+        for uid in bata.AllData().master:
             await bot.send_message(uid, 'Привет! Как ты себя чувствуешь?', reply_markup=nmarkup.as_markup())
 
 

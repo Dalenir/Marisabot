@@ -1,13 +1,13 @@
 import logging
 from typing import Any
 
-from bata import all_data
+from bata import AllData
 from marisa_log.scribe import witch_error
 
 
 async def data_getter(query, return_value: bool = True) -> Any:
     try:
-        conn = all_data().get_postg()
+        conn = AllData().get_postg()
         with conn:
             with conn.cursor() as cur:
                 cur.execute(query)
