@@ -15,6 +15,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSHKEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           connect_timeout: 10s
           script: |
             echo WELCOME
