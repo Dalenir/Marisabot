@@ -1,18 +1,13 @@
 import asyncio
-import csv
-from typing import Union
-from datetime import timedelta, datetime
 
 from aiogram import Router, F, Bot
 from aiogram import types
 from aiogram.dispatcher.fsm.context import FSMContext
-from aiogram.dispatcher.fsm.state import StatesGroup, State
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
-
 import bata
-from DBuse import answer_writer, time_watcher
+from DBuse import answer_writer
 from states import MarisaStates
 
 router = Router()
@@ -49,33 +44,36 @@ async def trap(message: Message):
 
 @router.callback_query((lambda call: int(call.data) in all_points), state=MarisaStates.start)
 async def trap_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext):
-    print(query.data)
+    print(f"Answer is {query.data}")
     await state.set_state(MarisaStates.sleepmode)
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     await answer_writer(int(query.data), query.from_user.id)
     await query.message.answer('Серьезно? А я бы дала себе 10 баллов.\n\nПритворюсь, что не слышала этого.'
-                         '\nБудем считать это твоим первым ответом о настроении. А теперь прости,'
-                         ' мне пора спать 12 часов, чтобы спросить тебя вновь...')
+                               '\nБудем считать это твоим первым ответом о настроении. А теперь прости,'
+                               ' мне пора спать 12 часов, чтобы спросить тебя вновь...')
 
 
 @router.message(commands=['test'])
-async def marisa_awaikens(message: Union[Message, None], bot: Bot):
+async def marisa_awaikens(message, bot: Bot):
     nmarkup = InlineKeyboardBuilder()
     for points in all_points:
         nmarkup.button(text=str(points), callback_data=str(points))
     nmarkup.adjust(3)
-    for uid in bata.all_data().master:
-        print(uid)
-        await bot.send_message(uid, 'Привет! Это я! Теперь у меня есть свой коробочный мир,'
-                                    ' а в нем свои сад и кладовка!\n'
-                                    'Честно говоря, я не отказалась'
-                                    ' бы от того, чтобы они были чуть надежнее, но и так неплохо!\n\n'
-                                    'А ты как?', reply_markup=nmarkup.as_markup())
+    if message:
+        await message.answer('Удачного теста!', reply_markup=nmarkup.as_markup())
+    else:
+        for uid in bata.all_data().master:
+            await bot.send_message(uid, 'Привет! Это я! Теперь у меня есть свой коробочный мир,'
+                                        ' а в нем свои сад и кладовка! \n'
+                                        'Честно говоря, я не отказалась'
+                                        ' бы от того, чтобы они были чуть надежнее, но и так неплохо!\n\n'
+                                        'А ты как?', reply_markup=nmarkup.as_markup())
 
 
-@router.callback_query((lambda call: int(call.data) in all_points), state=MarisaStates.sleepmode)
+@router.callback_query((lambda call: int(call.data) in all_points))
 async def marisa_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext):
+    print(f"Answer is {query.data}")
     await state.set_state(MarisaStates.sleepmode)
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)

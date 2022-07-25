@@ -2,3 +2,6 @@ psycopg2-binary
 aiogram~=3.0.0b3
 redis~=4.3.4
 aiohttp~=3.8.1
+psycopg2~=2.9.3
+colorama~=0.4.5
+asyncio~=3.4.3
