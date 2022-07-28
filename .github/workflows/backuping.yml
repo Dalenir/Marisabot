@@ -19,9 +19,10 @@ jobs:
           connect_timeout: 10s
           script: |
             echo Preparing
-            sudo -S mkdir -p Backups/Marisa
-            cd Backups/Marisa
+            cd Marisabot
+            echo ${{ secrets.PASSWORD }} | sudo -S mkdir -p DBs/Backups
+            cd DBs/Backups
             echo DUMPING PG
-            sudo -S docker exec -t Witch_stash pg_dumpall -c -U postgres > ./pg_dump.sql
+            echo ${{ secrets.PASSWORD }} | sudo -S docker exec -t Witch_stash pg_dumpall -c -U postgres > ./pg_dump.sql
             echo Zipping
             zip -r backup-$(date "+%b_%d_%Y").zip pg_dump.sql
