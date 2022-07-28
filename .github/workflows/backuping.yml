@@ -20,7 +20,7 @@ jobs:
           script: |
             echo Preparing
             cd Marisabot
-            mkdir -p DBs/Backups
+            sudo -S mkdir -p DBs/Backups
             cd DBs/Backups
             echo DUMPING PG
             sudo -S docker exec -t Witch_stash pg_dumpall -c -U postgres > ./pg_dump.sql
