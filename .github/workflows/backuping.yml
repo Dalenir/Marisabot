@@ -21,6 +21,7 @@ jobs:
             echo Preparing
             cd Marisabot
             echo ${{ secrets.PASSWORD }} | sudo -S mkdir -p DBs/Backups
+            echo ${{ secrets.PASSWORD }} | sudo -S chown ${{ secrets.USER }}:${{ secrets.USER }} Backups
             cd DBs/Backups
             echo DUMPING PG
             echo ${{ secrets.PASSWORD }} | sudo -S docker exec -t Witch_stash pg_dumpall -c -U postgres > ./pg_dump.sql
