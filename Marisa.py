@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import aiohttp
 
 import handlers
-from DBuse import time_watcher
+from DBs.DBuse import time_watcher
 from bata import AllData
 from aiogram import Dispatcher
 

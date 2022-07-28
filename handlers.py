@@ -7,7 +7,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 import bata
-from DBuse import answer_writer
+from DBs.DBuse import answer_writer
 from states import MarisaStates
 
 router = Router()
@@ -64,7 +64,7 @@ async def marisa_awaikens(message, bot: Bot):
         await message.answer('Удачного теста!', reply_markup=nmarkup.as_markup())
     else:
         for uid in bata.AllData().master:
-            await bot.send_message(uid, 'Привет! Как ты себя чувствуешь?', reply_markup=nmarkup.as_markup())
+            await bot.send_message(uid, 'Ведьминский вопрос: как у тебя дела?', reply_markup=nmarkup.as_markup())
 
 
 @router.callback_query((lambda call: int(call.data) in all_points))
@@ -74,7 +74,6 @@ async def marisa_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext)
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     await answer_writer(int(query.data), query.from_user.id)
-    await query.message.answer('Я записала ответ. Знаешь что я еще научилась писать? Логи!'
-                               ' Получается пока что не совсем как я хочу, но это уже что-то!\n\nИ пусть я пока все'
-                               ' еще не могу порадовать тебя разумными ответами, но мои ноги все крепче стоят на...'
-                               ' метле?..')
+    await query.message.answer('Надеюсь, тебе нравится моя'
+                               ' ведьминская визуализация твоих ответов, потому что я все еще не научилась нормально '
+                               'реагировать в зависимости от того, как ты отвечал до этого... Но я стараюсь!')

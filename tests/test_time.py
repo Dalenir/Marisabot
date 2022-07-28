@@ -2,7 +2,7 @@ import unittest
 
 import pytest
 
-import DBuse
+from DBs import DBuse
 
 
 @pytest.mark.asyncio

@@ -1,0 +1,28 @@
+name: Witchy backups
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '13 13 * * *'
+
+jobs:
+  pg_dumping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Witch_secrets
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSHKEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          connect_timeout: 10s
+          script: |
+            echo Preparing
+            cd Marisabot
+            mkdir -p DBs/Backups
+            cd DBs/Backups
+            echo DUMPING PG
+            sudo -S docker exec -t Witch_stash pg_dumpall -c -U postgres > ./pg_dump.sql
+            echo Zipping
+            zip -r backup-$(date "+%b_%d_%Y").zip pg_dump.sql
