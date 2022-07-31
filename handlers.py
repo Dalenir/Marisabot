@@ -62,22 +62,7 @@ async def marisa_awaikens(message, bot: Bot):
         nmarkup.button(text=str(points), callback_data=str(points))
     nmarkup.adjust(3)
     if message:
-        key, hello_text = str(), str()
-        old_points = (await get_old_points(message.from_user.id))[0][0]
-        if old_points == -3:
-            key = "Very bad"
-        elif old_points == -2:
-            key = "Bad"
-        elif old_points == -1:
-            key = "Little bad"
-        elif old_points == 1:
-            key = "Little good"
-        elif old_points == 2:
-            key = "Good"
-        elif old_points == 3:
-            key = "Very good"
-        hello_text = simple_answers[key]
-        await message.answer(hello_text, reply_markup=nmarkup.as_markup())
+        await message.answer('Это тестовая команда', reply_markup=nmarkup.as_markup())
     else:
         for uid in bata.AllData().master:
             key, hello_text = str(), str()
