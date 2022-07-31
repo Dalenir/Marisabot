@@ -22,21 +22,12 @@ async def data_getter(query, return_value: bool = True) -> Any:
 
 
 async def answer_writer(points, user):
-    old_points = 0
     quer = f"""CREATE table IF NOT EXISTS public.stats (id serial not null constraint stats_pk primary key,
             time timestamp, points int, user_id bigint);
             INSERT into public.stats (time, points, user_id) values
             (current_timestamp, {int(points)}, {user});
             """
     await data_getter(quer, return_value=False)
-    return old_points
-
-
-async def base_sentiency(points, old_points):
-    # answer = str()
-    previous_points, more_older_points = old_points
-    if points > previous_points and points > 0:
-        pass
 
 
 async def time_watcher():
@@ -48,3 +39,11 @@ async def time_watcher():
     else:
         logging.warning(f'Base time is not here! Atleast one user must complete starting dialog!')
         return False
+
+
+async def get_old_points(t_id: int):
+    quer = f"SELECT points, lag(points, 1) over (ORDER BY time asc) " \
+           f"from stats where user_id = {t_id} order by time desc limit 1"
+    old_points = await data_getter(quer, return_value=True)
+    print(old_points)
+    return old_points

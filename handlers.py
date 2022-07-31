@@ -7,7 +7,8 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 import bata
-from DBs.DBuse import answer_writer
+from DBs.DBuse import answer_writer, get_old_points
+from resources.bunch_of_variables import simple_answers
 from states import MarisaStates
 
 router = Router()
@@ -61,10 +62,40 @@ async def marisa_awaikens(message, bot: Bot):
         nmarkup.button(text=str(points), callback_data=str(points))
     nmarkup.adjust(3)
     if message:
-        await message.answer('Удачного теста!', reply_markup=nmarkup.as_markup())
+        key, hello_text = str(), str()
+        old_points = (await get_old_points(message.from_user.id))[0][0]
+        if old_points == -3:
+            key = "Very bad"
+        elif old_points == -2:
+            key = "Bad"
+        elif old_points == -1:
+            key = "Little bad"
+        elif old_points == 1:
+            key = "Little good"
+        elif old_points == 2:
+            key = "Good"
+        elif old_points == 3:
+            key = "Very good"
+        hello_text = simple_answers[key]
+        await message.answer(hello_text, reply_markup=nmarkup.as_markup())
     else:
         for uid in bata.AllData().master:
-            await bot.send_message(uid, 'Ведьминский вопрос: как у тебя дела?', reply_markup=nmarkup.as_markup())
+            key, hello_text = str(), str()
+            old_points = (await get_old_points(uid))[0][0]
+            if old_points == -3:
+                key = "Very bad"
+            elif old_points == -2:
+                key = "Bad"
+            elif old_points == -1:
+                key = "Little bad"
+            elif old_points == 1:
+                key = "Little good"
+            elif old_points == 2:
+                key = "Good"
+            elif old_points == 3:
+                key = "Very good"
+            hello_text = simple_answers[key]
+            await bot.send_message(uid, hello_text, reply_markup=nmarkup.as_markup())
 
 
 @router.callback_query((lambda call: int(call.data) in all_points))

@@ -4,6 +4,7 @@ from colorama import Fore, Back, Style
 import pathlib
 from datetime import datetime
 
+pathlib.Path('logs/').mkdir(parents=True, exist_ok=True)
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     filename=f'logs/{datetime.today().date()}_witch.log', filemode='a')
 
