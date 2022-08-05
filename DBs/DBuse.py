@@ -47,3 +47,10 @@ async def get_old_points(t_id: int):
     old_points = await data_getter(quer, return_value=True)
     print(old_points)
     return old_points
+
+
+async def redis_get(key):
+    try:
+        return AllData().get_data_red().get(key)
+    except Exception as error:
+        await witch_error(error, __file__)

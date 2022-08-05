@@ -85,11 +85,11 @@ async def marisa_awaikens(message, bot: Bot):
 
 @router.callback_query((lambda call: int(call.data) in all_points))
 async def marisa_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext):
-    print(f"Answer is {query.data}")
-    await state.set_state(MarisaStates.sleepmode)
+    markup = ReplyKeyboardBuilder()
+    markup.row(types.KeyboardButton(text="В ведьминский сад"))
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     await answer_writer(int(query.data), query.from_user.id)
-    await query.message.answer('Надеюсь, тебе нравится моя'
-                               ' ведьминская визуализация твоих ответов, потому что я все еще не научилась нормально '
-                               'реагировать в зависимости от того, как ты отвечал до этого... Но я стараюсь!')
+    await query.message.answer('<i>В этот раз Мариса просто кивает в ответ. Она странно задумчива, и часто смотрит '
+                               'в окно, за котором раскинулся ее сад. Кажется, дверь в него не заперта</i>',
+                               reply_markup=markup.as_markup(resize_keyboard=True))

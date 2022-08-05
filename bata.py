@@ -1,7 +1,7 @@
 import os
 
-from aiogram import Bot
 import psycopg2
+from aiogram import Bot
 from redis import from_url
 
 
@@ -24,4 +24,4 @@ class AllData:
 
     @staticmethod
     def get_data_red():
-        return from_url('redis://localhost:2769/1', decode_responses=True)
+        return from_url('redis://Witch_garden:2769/1', decode_responses=True)

@@ -1,14 +1,13 @@
 import asyncio
 from datetime import datetime, timedelta
+
 import aiohttp
-
-import handlers
-from DBs.DBuse import time_watcher
-from bata import AllData
 from aiogram import Dispatcher
-
 from aiogram.dispatcher.fsm.storage.redis import RedisStorage
 
+from DBs.DBuse import time_watcher
+from bata import AllData
+from handlers import main_hand, conv_hand
 from marisa_log.scribe import witch_log
 
 data = AllData()
@@ -26,7 +25,7 @@ async def marisa_eyes():
         while True:
             time = datetime.strptime(datetime.now().time().strftime('%H:%M'), '%H:%M').time()
             if time == one_time or time == two_time:
-                await handlers.marisa_awaikens(None, bot)
+                await main_hand.marisa_awaikens(None, bot)
                 await asyncio.sleep(120)
             await asyncio.sleep(0.5)
     else:
@@ -37,7 +36,8 @@ async def marisa_eyes():
 async def main():
     bot_info = await bot.get_me()
     print(f"Hello, i'm {bot_info.first_name} | {bot_info.username}")
-    dp.include_router(handlers.router)
+    dp.include_router(main_hand.router)
+    dp.include_router(conv_hand.router)
     asyncio.create_task(marisa_eyes())
     session = aiohttp.ClientSession()
     await session.close()

@@ -2,7 +2,7 @@ name: Witchy pipeline
 
 on:
   push:
-    branches: 
+    branches:
       - master
 
 jobs:

@@ -5,3 +5,5 @@ class MarisaStates(StatesGroup):
     start = State()
     sleepmode = State()
     awakemode = State()
+    garden = State()
+    alcove = State()
