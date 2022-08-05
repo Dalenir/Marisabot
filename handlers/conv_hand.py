@@ -42,7 +42,7 @@ async def garden_start(message: Message, state: FSMContext):
 
 
 @router.message(F.text == 'Воспользоваться секретным путем: перепрыгнуть через кусты ежевики, проползти под ядовитым '
-                          'плющом, избежать укуса тех странных цветов из Марио, и устало рухнуть на ступени беседки!')
+                          'плющом, избежать укуса тех странных цветов из марио, и устало рухнуть на ступени беседки!')
 # Похоже, что строка выше позволит пробраться в беседку, не создавая в нее путь. Но ее придется вводить каждый раз.
 @router.message(AlcoveFilter(), (F.text.contains('беседку')), state=MarisaStates.garden)
 async def alcove_start(message: Message, state: FSMContext):
