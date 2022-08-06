@@ -2,6 +2,7 @@ import unittest
 
 import psycopg2
 import pytest
+from aiogram import Bot
 
 from DBs import DBuse
 

@@ -17,12 +17,14 @@ jobs:
           touch .env
           echo BOT_TOKEN = ${{ secrets.TEST_BOT_TOKEN }} >> .env
           echo POSTGRES_PASSWORD = ${{ secrets.POSTGRES_PW }} >> .env
+          echo TEST_CHANNEL_ID = ${{ secrets.TEST_CHANNEL_ID }} >> .env
+          echo TEST_USER_ID = ${{ secrets.TEST_USER_ID }} >> .env
       - name: 'Building containers'
-        run: docker compose -f Marisa_flight.yml up -d
-      - name: 'Healthcheck'
-        run: |
-          sleep 5
-          docker exec Marisa pytest
+        run: docker compose -f CI/Marisa_flight.yml build
+      - name: 'Testing'
+        run: docker compose -f CI/Marisa_flight.yml up -d
+
+
 
 
       

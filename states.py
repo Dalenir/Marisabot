@@ -7,3 +7,7 @@ class MarisaStates(StatesGroup):
     awakemode = State()
     garden = State()
     alcove = State()
+
+
+class SmTestState(StatesGroup):
+    smoke = State()
