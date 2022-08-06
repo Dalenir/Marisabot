@@ -10,8 +10,8 @@ jobs:
       - name: 'Making .env'
         run: |
           touch .env
-          echo BOT_TOKEN = ${{ TEST_BOT_TOKEN }} >> .env
-          echo POSTGRES_PASSWORD = ${{ POSTGRES_PW }} >> .env
+          echo BOT_TOKEN = ${{ secrets.TEST_BOT_TOKEN }} >> .env
+          echo POSTGRES_PASSWORD = ${{ secrets.POSTGRES_PW }} >> .env
       - uses: actions/checkout@v2
       - name: 'Building containers'
         run: docker compose -f Marisa_flight.yml up -d
