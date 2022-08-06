@@ -23,9 +23,8 @@ jobs:
         run: docker compose -f CI/Testing.yml build
       - name: 'Testing'
         run: docker compose -f CI/Testing.yml up --abort-on-container-exit
-
-
-
-
-
-      
+      - name: 'Report upload'
+        uses: actions/upload-artifact@v1
+        with:
+          name: pytest_html_report
+          
