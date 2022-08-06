@@ -15,5 +15,5 @@ class TestMessages:
         bot = Bot(os.getenv('BOT_TOKEN'))
         dp = Dispatcher()
         dp.include_router(test_hand.router)
-        result = await dp.feed_update(bot, test_xmessage)
-        assert result == 'Smoketesting was successfull'
+        result = await dp.feed_update(bot, test_message)
+        assert result == 'Smoketesting was sudccessfull'
