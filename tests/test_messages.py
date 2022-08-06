@@ -1,5 +1,7 @@
 import asyncio
 import os
+import unittest
+
 import pytest
 from aiogram import Bot, Dispatcher
 
@@ -17,3 +19,7 @@ class TestMessages:
         dp.include_router(test_hand.router)
         result = await dp.feed_update(bot, test_message)
         assert result == 'Smoketesting was sudccessfull'
+
+
+if __name__ == '__main__':
+    unittest.main()
