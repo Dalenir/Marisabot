@@ -1,6 +1,8 @@
 import logging
 from typing import Any
 
+import psycopg2
+
 from bata import AllData
 from marisa_log.scribe import witch_error
 
@@ -16,7 +18,7 @@ async def data_getter(query, return_value: bool = True) -> Any:
         conn.close()
         if return_value:
             return data
-    except Exception as error:
+    except psycopg2.Error as error:
         await witch_error(error, __file__)
         return False
 
@@ -27,7 +29,8 @@ async def answer_writer(points, user):
             INSERT into public.stats (time, points, user_id) values
             (current_timestamp, {int(points)}, {user});
             """
-    await data_getter(quer, return_value=False)
+    if await data_getter(quer, return_value=False) is not None:
+        raise psycopg2.Error
 
 
 async def time_watcher():
@@ -52,5 +55,12 @@ async def get_old_points(t_id: int):
 async def redis_get(key):
     try:
         return AllData().get_data_red().get(key)
+    except Exception as error:
+        await witch_error(error, __file__)
+
+
+async def redis_set(key, value):
+    try:
+        return AllData().get_data_red().set(key, value)
     except Exception as error:
         await witch_error(error, __file__)
