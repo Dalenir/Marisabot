@@ -18,7 +18,7 @@ class TestMessages:
         dp = Dispatcher()
         dp.include_router(test_hand.router)
         result = await dp.feed_update(bot, test_message)
-        assert result == 'Smoketesting wasd successfull'
+        assert result == 'Smoketesting wasv successfull'
 
 
 if __name__ == '__main__':
