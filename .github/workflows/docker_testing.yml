@@ -1,0 +1,21 @@
+name: DockerTest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Making .env'
+        run: |
+          touch .env
+          echo BOT_TOKEN = ${{ TEST_BOT_TOKEN }} >> .env
+          echo POSTGRES_PASSWORD = ${{ POSTGRES_PW }} >> .env
+      - uses: actions/checkout@v2
+      - name: 'Building containers'
+        run: docker compose -f Marisa_flight.yml up -d
+      - name: 'Healthcheck'
+        run: |
+          sleep 5
+          docker inspect Marisa

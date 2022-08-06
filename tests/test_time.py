@@ -9,7 +9,7 @@ from DBs import DBuse
 class TestTime:
 
     async def test_no_time(self):
-        assert await DBuse.time_watcher() is True
+        assert await DBuse.time_watcher() is False
 
 
 if __name__ == '__main__':
