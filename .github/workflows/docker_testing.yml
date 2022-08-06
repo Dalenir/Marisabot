@@ -2,6 +2,10 @@ name: DockerTest
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - master
+
 
 jobs:
   test:
