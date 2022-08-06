@@ -22,7 +22,9 @@ jobs:
       - name: 'Building containers'
         run: docker compose -f CI/Testing.yml build
       - name: 'Testing'
-        run: docker compose -f CI/Testing.yml up -d
+        run: |
+          docker compose -f CI/Testing.yml up -d
+          sleep 10
 
 
 
