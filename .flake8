@@ -1,0 +1,8 @@
+[flake8]
+exclude=
+    *.pyc,
+    venv/.,
+    __init__.py
+max-line-length=120
+format=html
+htmldir=flake8_report
