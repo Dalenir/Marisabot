@@ -17,8 +17,7 @@ services:
     env_file:
       - ../.env
     command: >
-      sh -c "flake8 --exclude=*.pyc,venv/.,__init__.py --max-line-length=120 --format=html --htmldir=flake8_report &&
-              pytest"
+      sh -c "flake8 && pytest"
     depends_on:
       - databasu
       - redis
