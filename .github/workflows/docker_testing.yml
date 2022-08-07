@@ -19,8 +19,6 @@ jobs:
           echo POSTGRES_PASSWORD = ${{ secrets.POSTGRES_PW }} >> .env
           echo TEST_CHANNEL_ID = ${{ secrets.TEST_CHANNEL_ID }} >> .env
           echo TEST_USER_ID = ${{ secrets.TEST_USER_ID }} >> .env
-      - name: 'Formatting check'
-        run: flake8 --exclude=*.pyc,venv/.,__init__.py --max-line-length=120 --format=html --htmldir=flake8_report
       - name: 'Building containers'
         run: docker compose -f CI/Testing.yml build
       - name: 'Testing'
