@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(leve
 
 witch_log = logging.getLogger('Marisa Mistakes')
 witch_log.setLevel(logging.WARNING)
-witch_log.addHandler(logging.FileHandler(filename=f"logs/witch_mistakes.log", mode='w'))
+witch_log.addHandler(logging.FileHandler(filename="logs/witch_mistakes.log", mode='w'))
 
 
 async def witch_error(error_text: str | Exception, file: pathlib.Path | None = None):

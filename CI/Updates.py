@@ -1,7 +1,7 @@
 import os
-
-from aiogram.types import Update, ChatMemberUpdated, Chat, User, ChatMemberMember, ChatMemberAdministrator, Message
 from datetime import datetime
+
+from aiogram.types import Update, Chat, User, Message
 
 test_message = Update(
     update_id=1,

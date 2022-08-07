@@ -1,4 +1,3 @@
-import asyncio
 import os
 import unittest
 
@@ -7,7 +6,6 @@ from aiogram import Bot, Dispatcher
 
 from CI import test_hand
 from CI.Updates import test_message
-from handlers import main_hand
 
 
 @pytest.mark.asyncio

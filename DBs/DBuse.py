@@ -40,7 +40,7 @@ async def time_watcher():
         logging.info(f'Base time is here: {data}\nBot is sending messages every 12h from this time')
         return data[0][0]
     else:
-        logging.warning(f'Base time is not here! Atleast one user must complete starting dialog!')
+        logging.warning('Base time is not here! Atleast one user must complete starting dialog!')
         return False
 
 
