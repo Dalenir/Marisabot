@@ -5,8 +5,7 @@ services:
     image: postgres:14.4
     container_name: Witch_stash
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - .env
     ports:
       - "5454:5432"
     networks:
@@ -28,7 +27,7 @@ services:
     image: redis:7.0.4
     container_name: Witch_garden
     ports:
-      - "2769:2769"
+      - ":2769"
     command: --port 2769
     networks:
       - twitchy_forest
