@@ -57,7 +57,7 @@ class TestMessages:
             uppdate = fake_callback_update(call, int(os.getenv('TEST_USER_ID')),
                                            int(os.getenv('TEST_USER_ID')))
             await dp.feed_update(bot, uppdate)
-            await marisa_awaikens(bot, users_list=[os.getenv('TEST_USER_ID')])
+            await marisa_awaikens(bot=bot, users_list=[os.getenv('TEST_USER_ID')])
 
 
 if __name__ == '__main__':

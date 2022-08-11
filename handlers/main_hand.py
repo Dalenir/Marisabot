@@ -58,7 +58,8 @@ async def trap_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext):
 
 
 @router.message(commands=['test'])
-async def marisa_awaikens(bot: Bot, message: Message | None = None, users_list: tuple | list = bata.AllData().master):
+async def marisa_awaikens(message: Message | None = None, bot: Bot = None,
+                          users_list: tuple | list = bata.AllData().master):
     nmarkup = InlineKeyboardBuilder()
     for points in all_points:
         nmarkup.button(text=str(points), callback_data=str(points))
