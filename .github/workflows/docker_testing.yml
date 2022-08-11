@@ -28,6 +28,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Report
-          path: |
-            pytest_html_report.html
-            flake8_report
+          path: reports

@@ -17,7 +17,9 @@ services:
     env_file:
       - ../.env
     command: >
-      sh -c "flake8 && pytest"
+      sh -c "mkdir -p reports &&
+              flake8 && 
+              pytest --html-report=reports/pytest_report --cov=. tests/ --cov-report html:reports/coverage_html"
     depends_on:
       - databasu
       - redis

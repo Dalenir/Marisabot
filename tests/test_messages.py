@@ -13,16 +13,15 @@ from Marisa import main
 @pytest.mark.asyncio
 class TestMessages:
 
-    async def test_start(self):
+    async def test_smoke(self):
         bot = Bot(os.getenv('BOT_TOKEN'))
         dp = Dispatcher()
         dp.include_router(test_hand.router)
-        result = await dp.feed_update(bot, test_message)
-        assert result == 'Smoketesting was successfull'
+        assert await dp.feed_update(bot, test_message) is True
 
     async def test_bot_door(self):
         try:
-            await asyncio.wait_for(main(), 10)
+            await asyncio.wait_for(main(), 3)
         except asyncio.exceptions.TimeoutError:
             pass
 

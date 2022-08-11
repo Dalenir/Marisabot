@@ -16,7 +16,6 @@ async def smoketesting(message: Message, bot: Bot, state: FSMContext):
     msg = await message.answer(f'{numbear}')
     if msg.text == str(numbear):
         await bot.delete_message(msg.chat.id, msg.message_id)
-        msg = await message.answer('Smoketesting was successfull')
         await state.clear()
         await bot.session.close()
-    return msg.text
+        return True

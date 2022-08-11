@@ -5,4 +5,4 @@ exclude=
     __init__.py
 max-line-length=120
 format=html
-htmldir=flake8_report
+htmldir=reports/flake8_report
