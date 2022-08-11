@@ -4,7 +4,7 @@ services:
   databasu:
     image: postgres:14.4
     container_name: Witch_stash
-    environment:
+    env_file:
       - .env
     ports:
       - "5454:5432"
