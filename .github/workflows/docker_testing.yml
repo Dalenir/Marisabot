@@ -48,3 +48,6 @@ jobs:
           message: 'Минимум один этап тестирования был провален. Результирующий файл:'
           parse_mode: MarkdownV2
           file_path: reports
+      - name: aa
+        run:
+          echo ${{steps.testing.outcome}}
