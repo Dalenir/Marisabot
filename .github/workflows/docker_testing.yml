@@ -22,7 +22,7 @@ jobs:
           echo TEST_USER_ID = ${{ secrets.TEST_USER_ID }} >> .env
       - name: 'Building containers'
         run: docker compose -f CI/Testing.yml build
-      - name: Testing
+      - name: Te sting
         run: docker compose -f CI/Testing.yml up --abort-on-container-exit
       - name: Report upload
         if: always()
@@ -39,7 +39,7 @@ jobs:
           message: '*Тестирование завершено успешно*'
           parse_mode: MarkdownV2
       - name: Telegram Notification Failure
-        if: steps.Testing.outcome == 'failure' || steps.Report_upload.outcome == 'failure'
+        if: steps.Te_sting.outcome == 'failure' || steps.Report_upload.outcome == 'failure'
         uses: Dalenir/bumblebee@master
         continue-on-error: true
         with:
