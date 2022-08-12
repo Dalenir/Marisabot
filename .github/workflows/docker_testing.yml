@@ -11,6 +11,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: FAIL
+        run: exit 1
       - uses: actions/checkout@v2
       - name: 'Making .env'
         run: |
