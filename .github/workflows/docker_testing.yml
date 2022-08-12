@@ -43,7 +43,7 @@ jobs:
           message: '*Тестирование завершено успешно*'
           parse_mode: MarkdownV2
       - name: Telegram Notification Failure
-        if: failure()
+        if: failure() && steps.fai.outcome == 'failure'
         uses: Dalenir/bumblebee@master
         with:
           bot_token: ${{ secrets.TEST_BOT_TOKEN }}
