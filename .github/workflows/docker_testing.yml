@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: FAIL
-        continue-on-error: true
         id: fai
         run: exit 1
       - uses: actions/checkout@v2
