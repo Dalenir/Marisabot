@@ -49,5 +49,6 @@ jobs:
           parse_mode: MarkdownV2
           file_path: reports
       - name: aa
+        if: always()
         run:
           echo ${{steps.testing.outcome}}
