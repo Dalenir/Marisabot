@@ -22,18 +22,27 @@ jobs:
           echo TEST_USER_ID = ${{ secrets.TEST_USER_ID }} >> .env
       - name: 'Building containers'
         run: docker compose -f CI/Testing.yml build
-      - name: 'Testing'
+      - name: Testing
         run: docker compose -f CI/Testing.yml up --abort-on-container-exit
-      - name: 'Report upload'
+      - name: Report upload
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: Report
           path: reports
-      - name: Telegram Notification
+      - name: Telegram Notification Success
         uses: Dalenir/bumblebee@master
         with:
           bot_token: ${{ secrets.TEST_BOT_TOKEN }}
           chat_id: ${{ secrets.BOT_MASTER_ID }}
-          message: '*Марисабот успешно размещен на сервере*'
+          message: '*Тестирование завершено успешно*'
+          parse_mode: MarkdownV2
+      - name: Telegram Notification Failure
+        if: steps.Testing.outcome == 'failure' || steps.Report upload.outcome == 'failure'
+        uses: Dalenir/bumblebee@master
+        with:
+          bot_token: ${{ secrets.TEST_BOT_TOKEN }}
+          chat_id: ${{ secrets.BOT_MASTER_ID }}
+          message: 'Минимум один этап тестирования был провален. Результирующий файл:'
           parse_mode: MarkdownV2
           file_path: reports
