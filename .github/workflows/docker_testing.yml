@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: FAIL
+        continue-on-error: true
         id: fai
         run: exit 1
       - uses: actions/checkout@v2
@@ -54,4 +55,4 @@ jobs:
       - name: aa
         if: always()
         run:
-          echo ${{steps.testing.outcome}}
+          echo ${{steps.fai.outcome}}
