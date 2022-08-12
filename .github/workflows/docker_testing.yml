@@ -44,12 +44,12 @@ jobs:
           message: '*Тестирование завершено успешно*'
           parse_mode: MarkdownV2
       - name: Telegram Notification Failure
-        if: ${{steps.fai.outcome}} == 'failure'
+        if: failure() && ${{steps.fai.outcome}} == 'failure'
         uses: Dalenir/bumblebee@master
         with:
           bot_token: ${{ secrets.TEST_BOT_TOKEN }}
           chat_id: ${{ secrets.BOT_MASTER_ID }}
-          message: 'Минимум один этап тестирования был провален. Результирующий файл:'
+          message: 'Минимум один этап тестирования был провален. Ниже приведен результирующий файл, если он доступен'
           parse_mode: MarkdownV2
           file_path: reports
       - name: aa
