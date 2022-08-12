@@ -31,7 +31,7 @@ async def marisa_eyes():
     else:
         witch_log.warning('There is no records in table, sleep for 1h')
         await asyncio.sleep(3600)
-dew
+
 
 async def main():
     bot_info = await bot.get_me()
