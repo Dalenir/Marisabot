@@ -19,8 +19,7 @@ services:
     command: >
       sh -c "mkdir -p reports &&
               flake8 && 
-              pytest --html-report=reports/pytest_report 
-                     --cov=. CI/tests --cov-report html:reports/coverage_html --cov-fail-under=85"
+              pytest --html-report=reports/pytest_report --cov=. CI/tests --cov-report html:reports/coverage_html --cov-fail-under=80"
     depends_on:
       - databasu
       - redis
