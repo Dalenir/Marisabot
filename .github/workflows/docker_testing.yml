@@ -11,9 +11,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: FAIL
-        id: fai
-        run: exit 1
       - uses: actions/checkout@v2
       - name: 'Making .env'
         run: |
@@ -36,14 +33,14 @@ jobs:
           path: reports
       - name: Telegram Notification Success
         uses: Dalenir/bumblebee@master
-        if: ${{steps.fai.outcome}} == 'success'
+        if: ${{steps.testing.outcome}} == 'success'
         with:
           bot_token: ${{ secrets.TEST_BOT_TOKEN }}
           chat_id: ${{ secrets.BOT_MASTER_ID }}
           message: '*Тестирование завершено успешно*'
           parse_mode: MarkdownV2
       - name: Telegram Notification Failure
-        if: failure() && steps.fai.outcome == 'failure'
+        if: failure() && steps.testing.outcome == 'failure'
         uses: Dalenir/bumblebee@master
         with:
           bot_token: ${{ secrets.TEST_BOT_TOKEN }}
@@ -51,7 +48,3 @@ jobs:
           message: 'Минимум один этап тестирования был провален\. Ниже приведен результирующий файл, если он доступен'
           parse_mode: MarkdownV2
           file_path: reports
-      - name: aa
-        if: always()
-        run:
-          echo ${{steps.fai.outcome}}
