@@ -154,3 +154,6 @@ cython_debug/
 *.html
 *.css
 *.svg
+databases/redis/data/dump.rdb
+.idea/dataSources.xml
+databases/postgres/dumps/dump.sql
