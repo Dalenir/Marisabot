@@ -2,13 +2,16 @@ version: "3.8"
 
 services:
   databasu:
-    image: postgres:14.4
+    build:
+      context: ../databases/postgres
+      dockerfile: ../databases/postgres/postgres.dockerfile
     container_name: Witch_stash
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - ../.env
     ports:
       - "5454:5432"
+    volumes:
+      - ../databases/postgres/dump.sql:/docker-entrypoint-initdb.d/2dumps.sql
     networks:
       - twitchy_forest
   bot:
@@ -33,6 +36,8 @@ services:
     ports:
       - "2769:2769"
     command: --port 2769
+    volumes:
+      - ./databases/redis/data:/data
     networks:
       - twitchy_forest
 networks:
