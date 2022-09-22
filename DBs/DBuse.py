@@ -106,8 +106,12 @@ class WitchGuest:
         await data_getter(q, return_value=False)
 
     async def create(self, user: User):
-        q = f"INSERT INTO public.users(t_id, username, fullname) VALUES " \
-            f"({user.id}, '{user.username}', '{user.full_name}')"
-        await data_getter(q, return_value=False)
         self.id = user.id
-        return await self.get_user()
+        try:
+            await self.get_user()
+        except BadGuest:
+            q = f"INSERT INTO public.users(t_id, username, fullname) VALUES " \
+                f"({user.id}, '{user.username}', '{user.full_name}')"
+            await data_getter(q, return_value=False)
+            self.id = user.id
+            return await self.get_user()
