@@ -8,7 +8,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 import bata
-from DBs.DBuse import answer_writer, get_old_points
+from DBs.DBuse import answer_writer, get_old_points, WitchGuest
 from resources.bunch_of_variables import simple_answers
 from states import MarisaStates
 
@@ -47,11 +47,14 @@ async def trap(message: Message):
 
 @router.callback_query((lambda call: int(call.data) in all_points), state=MarisaStates.start)
 async def trap_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext):
-    print(f"Answer is {query.data}")
     await state.set_state(MarisaStates.sleepmode)
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
-    await answer_writer(int(query.data), query.from_user.id)
+    guest = WitchGuest(query.from_user.id)
+    if not await guest.get_user():
+        await guest.create(query.from_user)
+    await guest.save_answer(query.data)
+    await guest.enable_mood_diary()
     await query.message.answer('Серьезно? А я бы дала себе 10 баллов.\n\nПритворюсь, что не слышала этого.'
                                '\nБудем считать это твоим первым ответом о настроении. А теперь прости,'
                                ' мне пора спать 12 часов, чтобы спросить тебя вновь...')
@@ -96,6 +99,5 @@ async def marisa_answer(query: types.CallbackQuery, bot: Bot):
     except TelegramBadRequest:
         pass
     await answer_writer(int(query.data), query.from_user.id)
-    await query.message.answer('<i>В этот раз Мариса просто кивает в ответ. Она странно задумчива, и часто смотрит '
-                               'в окно, за котором раскинулся ее сад. Кажется, дверь в него не заперта</i>',
+    await query.message.answer('Похоже, что я вышла из задумчивости! Но почему бы тебе все равно не посетить мой сад?',
                                reply_markup=markup.as_markup(resize_keyboard=True))
