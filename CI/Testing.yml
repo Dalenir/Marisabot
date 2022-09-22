@@ -4,7 +4,7 @@ services:
   databasu:
     build:
       context: ../databases/postgres
-      dockerfile: ../databases/postgres/postgres.dockerfile
+      dockerfile: postgres.dockerfile
     container_name: Witch_stash
     env_file:
       - ../.env
@@ -37,7 +37,7 @@ services:
       - "2769:2769"
     command: --port 2769
     volumes:
-      - ./databases/redis/data:/data
+      - ../databases/redis/data:/data
     networks:
       - twitchy_forest
 networks:

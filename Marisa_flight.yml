@@ -4,7 +4,7 @@ services:
   databasu:
     build:
       context: databases/postgres
-      dockerfile: databases/postgres/postgres.dockerfile
+      dockerfile: postgres.dockerfile
     container_name: Witch_stash
     env_file:
       - .env
