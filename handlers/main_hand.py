@@ -52,7 +52,7 @@ async def trap_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext):
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     guest = await WitchGuest().create(query.from_user)
     await guest.save_answer(query.data)
-    await guest.enable_mood_diary()
+    await guest.switch_mood_diary()
     await query.message.answer('Серьезно? А я бы дала себе 10 баллов.\n\nПритворюсь, что не слышала этого.'
                                '\nБудем считать это твоим первым ответом о настроении. А теперь прости,'
                                ' мне пора спать 12 часов, чтобы спросить тебя вновь...')
@@ -66,7 +66,7 @@ async def marisa_awaikens(message: Message | None = None, bot: Bot = None,
         nmarkup.button(text=str(points), callback_data=str(points))
     nmarkup.adjust(3)
     if message:
-        await message.answer('Это тестовая команда', reply_markup=nmarkup.as_markup())
+        await message.answer('Это тестовая команда!', reply_markup=nmarkup.as_markup())
     else:
         for uid in users_list:
             key, hello_text = str(), str()

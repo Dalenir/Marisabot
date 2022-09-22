@@ -49,7 +49,6 @@ async def get_old_points(t_id: int):
     quer = f"SELECT points, lag(points, 1) over (ORDER BY time) " \
            f"from stats where user_id = {t_id} order by time desc limit 1"
     old_points = await data_getter(quer, return_value=True)
-    print(old_points)
     return old_points
 
 
