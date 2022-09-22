@@ -50,9 +50,7 @@ async def trap_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext):
     await state.set_state(MarisaStates.sleepmode)
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
-    guest = WitchGuest(query.from_user.id)
-    if not await guest.get_user():
-        await guest.create(query.from_user)
+    guest = await WitchGuest().create(query.from_user)
     await guest.save_answer(query.data)
     await guest.enable_mood_diary()
     await query.message.answer('Серьезно? А я бы дала себе 10 баллов.\n\nПритворюсь, что не слышала этого.'

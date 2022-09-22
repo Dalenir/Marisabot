@@ -1,5 +1,4 @@
 import os
-import unittest
 
 import pytest
 from aiogram import Bot, Dispatcher
@@ -11,13 +10,35 @@ from aiogram.exceptions import TelegramBadRequest
 
 from CI import test_hand
 from CI.Updates import fake_message_update, fake_callback_update
+from DBs.DBuse import data_getter
 from bata import AllData
 from handlers import main_hand
 from handlers.main_hand import marisa_awaikens
 from states import MarisaStates
 
+pytestmark = pytest.mark.anyio
 
-@pytest.mark.asyncio
+
+@pytest.fixture(scope='module')
+def anyio_backend():
+    return 'asyncio'
+
+
+@pytest.fixture(scope='module', autouse=True)
+async def db_restore(anyio_backend):
+    yield
+    print('SETUP TESTS')
+    path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    with open(f'{path}/databases/postgres/init.sql') as file:
+        sqlFile = file.read()
+    sqlCommands = sqlFile.split(';')
+    await data_getter('DROP TABLE IF EXISTS stats CASCADE;'
+                      'DROP TABLE IF EXISTS users CASCADE ;'
+                      'DROP TABLE IF EXISTS everyday_tasks CASCADE;', return_value=False)
+    for sqlcommand in sqlCommands:
+        await data_getter(sqlcommand, return_value=False)
+
+
 class TestMessages:
 
     async def test_smoke(self):
@@ -58,7 +79,3 @@ class TestMessages:
                                            int(os.getenv('TEST_USER_ID')))
             await dp.feed_update(bot, uppdate)
             await marisa_awaikens(bot=bot, users_list=[os.getenv('TEST_USER_ID')])
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -7,6 +7,7 @@ from bata import AllData
 from marisa_log.scribe import witch_error
 from aiogram.types import User
 
+
 async def data_getter(query, return_value: bool = True) -> Any:
     try:
         conn = AllData().get_postg()
@@ -63,34 +64,50 @@ async def redis_set(key, value):
         await witch_error(error, __file__)
 
 
+class BadGuest(Exception):
+    def __init__(self, error_text):
+        super().__init__(error_text)
+
+
 class WitchGuest:
-    def __init__(self, telegram_id: int):
+    def __init__(self, telegram_id: int | None = None):
+        self.id = telegram_id
         self.full_name = None
         self.username = None
-        self.id = telegram_id
+        self.mood_diary_concern = None
+        self.everyday_task_concern = None
 
     async def get_user(self):
-        q = f'SELECT username, fullname, mood_concern FROM public.users WHERE t_id = {self.id}'
+        q = f'SELECT username, fullname, mood_concern, tasks_concern FROM public.users WHERE t_id = {self.id}'
         userdata = await data_getter(q)
         if userdata:
             self.username = userdata[0][0]
             self.full_name = userdata[0][1]
-            return self.id, self.username, self.full_name
+            self.mood_diary_concern = userdata[0][2]
+            self.everyday_task_concern = userdata[0][3]
+            return self
+        else:
+            raise BadGuest('Guest with given id is not found')
 
     async def save_answer(self, points):
-        q = f"""INSERT into public.stats (time, points, user_id) values 
-            (current_timestamp, {int(points)}, {self.id});
+        q = f"""INSERT into public.stats (time, points, user_id) values
+         (current_timestamp, {int(points)}, {self.id});
             """
         await data_getter(q, return_value=False)
 
-    async def enable_mood_diary(self):
+    async def switch_mood_diary(self):
         q = f"""
             UPDATE public.users SET mood_concern = True WHERE t_id = {self.id}
                 """
         await data_getter(q, return_value=False)
 
-    @staticmethod
-    async def create(user: User):
+    async def enable_everyday_tasks(self):
+        q = f'UPDATE public.users SET tasks_concern = True WHERE t_id = {self.id}'
+        await data_getter(q, return_value=False)
+
+    async def create(self, user: User):
         q = f"INSERT INTO public.users(t_id, username, fullname) VALUES " \
             f"({user.id}, '{user.username}', '{user.full_name}')"
         await data_getter(q, return_value=False)
+        self.id = user.id
+        return await self.get_user()

@@ -10,8 +10,6 @@ services:
       - ../.env
     ports:
       - "5454:5432"
-    volumes:
-      - ../databases/postgres/dump.sql:/docker-entrypoint-initdb.d/2dumps.sql
     networks:
       - twitchy_forest
   bot:
