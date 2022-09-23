@@ -10,7 +10,7 @@ from aiogram.exceptions import TelegramBadRequest
 
 from CI import test_hand
 from CI.Updates import fake_message_update, fake_callback_update
-from DBs.DBuse import data_getter
+from DBs.DBuse import data_getter, WitchGuest
 from bata import AllData
 from handlers import main_hand
 from handlers.main_hand import marisa_awaikens
@@ -24,10 +24,10 @@ def anyio_backend():
     return 'asyncio'
 
 
-@pytest.fixture(scope='module', autouse=True)
+@pytest.fixture(scope='class', autouse=True)
 async def db_restore(anyio_backend):
     yield
-    print('SETUP TESTS')
+    print('TEAR DOWN TESTS')
     path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     with open(f'{path}/databases/postgres/init.sql') as file:
         sqlFile = file.read()
@@ -73,6 +73,7 @@ class TestMessages:
                 await dp.feed_update(bot, uppdate)
             except TelegramBadRequest:
                 pass
+        assert await WitchGuest(int(os.getenv('TEST_USER_ID'))).get_user()
         for call in callbacks:
             await state.set_state(MarisaStates.sleepmode)
             uppdate = fake_callback_update(call, int(os.getenv('TEST_USER_ID')),

@@ -36,15 +36,6 @@ class TestDBs:
     async def test_time_warning(self):
         assert await DBuse.time_watcher() is False
 
-    async def test_add_answer(self):
-        await DBuse.answer_writer(5, 666)
-
-    async def test_time(self):
-        assert await DBuse.time_watcher() is not False
-
-    async def test_no_time(self):
-        assert await DBuse.get_old_points(666) is not False
-
     async def test_redis_zero_connect(self):
         assert data.get_red().set('1', '1') is not False
 
@@ -70,6 +61,15 @@ class TestWitchGuest:
     def test_negative_id(self, request):
         return request.param
 
+    @pytest.fixture(scope="class", params=[(7000, 'Testing', 'Ultra'),
+                                           (921348903, '', '')],
+                    ids=['Valid user', 'User with empty username and fullname'])
+    async def ind_pos_test_db_data(self, request):
+        q = f"INSERT INTO public.users(t_id, username, fullname) VALUES ({request.param[0]}, '{request.param[1]}'," \
+            f" '{request.param[2]}')"
+        await data_getter(q, return_value=False)
+        return request.param
+
     async def test_get_negative(self, test_negative_id):
         try:
             await WitchGuest(test_negative_id).get_user()
@@ -78,12 +78,10 @@ class TestWitchGuest:
         else:
             raise Exception('Not valid guest, but no Bad Guest Exeption!')
 
-    async def test_get_positive(self):
-        q = "INSERT INTO public.users(t_id, username, fullname) VALUES (7000, 'Testing', 'Ultra')"
-        await data_getter(q, return_value=False)
-        guest = await WitchGuest(7000).get_user()
-        assert guest.full_name == 'Ultra'
-        assert guest.username == 'Testing'
+    async def test_get_positive(self, ind_pos_test_db_data):
+        guest = await WitchGuest(ind_pos_test_db_data[0]).get_user()
+        assert guest.full_name == ind_pos_test_db_data[2]
+        assert guest.username == ind_pos_test_db_data[1]
 
     async def test_create(self):
         user = User(
@@ -96,3 +94,19 @@ class TestWitchGuest:
         new_guest = await WitchGuest().create(user)
         assert new_guest.full_name == 'Tester Shmester'
         assert new_guest.id == 123123
+
+    async def test_mood_switch(self, ind_pos_test_db_data):
+        guest = await WitchGuest(ind_pos_test_db_data[0]).get_user()
+        assert not guest.mood_diary_concern
+        await guest.switch_mood_diary()
+        assert guest.mood_diary_concern
+        await guest.switch_mood_diary()
+        assert not guest.mood_diary_concern
+
+    async def test_concern_switch(self, ind_pos_test_db_data):
+        guest = await WitchGuest(ind_pos_test_db_data[0]).get_user()
+        assert not guest.everyday_task_concern
+        await guest.switch_everyday_tasks()
+        assert guest.everyday_task_concern
+        await guest.switch_everyday_tasks()
+        assert not guest.everyday_task_concern

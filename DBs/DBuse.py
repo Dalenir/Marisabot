@@ -95,13 +95,21 @@ class WitchGuest:
         await data_getter(q, return_value=False)
 
     async def switch_mood_diary(self):
+        if self.mood_diary_concern is None:
+            await self.get_user()
+        self.mood_diary_concern = False if self.mood_diary_concern else True
         q = f"""
-            UPDATE public.users SET mood_concern = True WHERE t_id = {self.id}
+            UPDATE public.users SET mood_concern = {self.mood_diary_concern} WHERE t_id = {self.id}
                 """
         await data_getter(q, return_value=False)
 
-    async def enable_everyday_tasks(self):
-        q = f'UPDATE public.users SET tasks_concern = True WHERE t_id = {self.id}'
+    async def switch_everyday_tasks(self):
+        if self.everyday_task_concern is None:
+            await self.get_user()
+        self.everyday_task_concern = False if self.everyday_task_concern else True
+        q = f"""
+            UPDATE public.users SET mood_concern = {self.everyday_task_concern} WHERE t_id = {self.id}
+                """
         await data_getter(q, return_value=False)
 
     async def create(self, user: User):

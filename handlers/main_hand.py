@@ -48,8 +48,11 @@ async def trap(message: Message):
 @router.callback_query((lambda call: int(call.data) in all_points), state=MarisaStates.start)
 async def trap_answer(query: types.CallbackQuery, bot: Bot, state: FSMContext):
     await state.set_state(MarisaStates.sleepmode)
-    await query.answer()
-    await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
+    try:
+        await query.answer()
+        await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
+    except TelegramBadRequest:
+        pass
     guest = await WitchGuest().create(query.from_user)
     await guest.save_answer(query.data)
     await guest.switch_mood_diary()
@@ -66,7 +69,7 @@ async def marisa_awaikens(message: Message | None = None, bot: Bot = None,
         nmarkup.button(text=str(points), callback_data=str(points))
     nmarkup.adjust(3)
     if message:
-        await message.answer('Это тестовая команда!', reply_markup=nmarkup.as_markup())
+        await message.answer('Это тестовая команда?', reply_markup=nmarkup.as_markup())
     else:
         for uid in users_list:
             key, hello_text = str(), str()

@@ -32,7 +32,8 @@ def fake_callback_update(data: str, chat_id: int, user_id: int):
             from_user=User(
                 id=user_id,
                 is_bot=False,
-                first_name=''
+                username='ESTINGT',
+                first_name='INGT'
             ),
             chat_instance=str(chat_id),
             message=Message(

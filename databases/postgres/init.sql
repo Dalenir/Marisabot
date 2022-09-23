@@ -1,16 +1,3 @@
-create table stats
-(
-    id      serial
-        constraint stats_pk
-            primary key,
-    time    timestamp,
-    points  integer,
-    user_id bigint
-);
-
-alter table stats
-    owner to postgres;
-
 create table users
 (
     t_id          bigint                not null
@@ -25,6 +12,20 @@ create table users
 alter table users
     owner to postgres;
 
+create table stats
+(
+    id      serial
+        constraint stats_pk
+            primary key,
+    time    timestamp,
+    points  integer,
+    user_id bigint
+        constraint foreign_key_user
+            references users
+);
+
+alter table stats
+    owner to postgres;
 
 create table everyday_tasks
 (
@@ -40,3 +41,4 @@ create table everyday_tasks
 
 alter table everyday_tasks
     owner to postgres;
+
