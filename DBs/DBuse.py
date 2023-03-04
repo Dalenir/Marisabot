@@ -45,15 +45,14 @@ async def time_watcher():
         return False
 
 
-async def get_old_points(t_id: int):
-    quer = f"SELECT points, lag(points, 1) over (ORDER BY time) " \
-           f"from stats where user_id = {t_id} order by time desc limit 1"
-    old_points = await data_getter(quer, return_value=True)
-    return old_points
-
-
 async def redis_get(key):
     return AllData().get_data_red().get(key)
+
+async def redis_list(key):
+    return AllData().get_data_red().lrange(key, start=0, end=-1)
+
+async def redis_add_to_list(key, value):
+    return AllData().get_data_red().lpush(key, value)
 
 
 async def redis_set(key, value):
@@ -121,3 +120,9 @@ class WitchGuest:
                 f"({user.id}, '{user.username}', '{user.full_name}')"
             await data_getter(q, return_value=False)
         return await self.get_user()
+
+    async def get_old_points(self):
+        quer = f"SELECT points, lag(points, 1) over (ORDER BY time) " \
+               f"from stats where user_id = {self.id} order by time desc limit 1"
+        old_points = await data_getter(quer, return_value=True)
+        return old_points

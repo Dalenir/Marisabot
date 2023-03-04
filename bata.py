@@ -10,6 +10,7 @@ class AllData:
         self.redis_url = 'redis://Witch_garden:2769'
         self.bot_token = os.getenv('BOT_TOKEN')
         self.master = (459509035, 319736241)
+        self.aitoken = os.getenv('AI_TOKEN')
 
     def get_bot(self):
         return Bot(self.bot_token, parse_mode="HTML")
@@ -24,4 +25,4 @@ class AllData:
 
     @staticmethod
     def get_data_red():
-        return from_url('redis://Witch_garden:2769/1', decode_responses=True)
+        return from_url('redis://Witch_garden:2769/1', decode_responses=False)

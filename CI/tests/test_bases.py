@@ -6,6 +6,7 @@ from aiogram.types import User
 from DBs import DBuse
 from DBs.DBuse import WitchGuest, BadGuest, data_getter
 from bata import AllData
+from functions.daily_mood import WitchyMood
 
 data = AllData()
 pytestmark = pytest.mark.anyio
@@ -110,3 +111,21 @@ class TestWitchGuest:
         assert guest.everyday_task_concern
         await guest.switch_everyday_tasks()
         assert not guest.everyday_task_concern
+
+
+class TestDailyMood:
+    @pytest.fixture(scope='class', autouse=True)
+    def test_data(self):
+        return ((int(os.getenv('TEST_USER_ID')), 'A', 'A', True, False), (1, 'B', 'B', True, False),
+                (1, 'C', 'C', True, False), (1, 'D', 'D', True, False), (1, 'E', 'E', True, False),
+                (1, 'F', 'F', True, False))
+
+    @pytest.fixture(scope='class', autouse=True)
+    async def fill_base(self, test_data):
+        await data_getter(f"INSERT INTO public.users values ({'), ('.join(test_data)})")
+
+    async def test_witchy_mood_create(self):
+        mood = WitchyMood()
+        assert not mood.concern_list
+        await mood.fill_concern_list()
+        assert len(mood.concern_list) == 6

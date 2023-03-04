@@ -8,7 +8,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 import bata
-from DBs.DBuse import answer_writer, get_old_points, WitchGuest
+from DBs.DBuse import answer_writer, WitchGuest
 from resources.bunch_of_variables import simple_answers
 from states import MarisaStates
 
@@ -100,5 +100,4 @@ async def marisa_answer(query: types.CallbackQuery, bot: Bot):
     except TelegramBadRequest:
         pass
     await answer_writer(int(query.data), query.from_user.id)
-    await query.message.answer('Похоже, что я вышла из задумчивости! Но почему бы тебе все равно не посетить мой сад?',
-                               reply_markup=markup.as_markup(resize_keyboard=True))
+    await query.message.answer('Я рада, что ты со мной поделился!')

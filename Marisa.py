@@ -1,13 +1,16 @@
 import asyncio
-from datetime import datetime, timedelta
-
+import warnings
 import aiohttp
+import pytz
 from aiogram import Dispatcher
 from aiogram.dispatcher.fsm.storage.redis import RedisStorage
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 from DBs.DBuse import time_watcher
 from bata import AllData
-from handlers import main_hand, conv_hand
+from functions.daily_mood import WitchyMood
+from handlers import main_hand, conv_hand, free_speach_hand
 from marisa_log.scribe import witch_log
 
 data = AllData()
@@ -19,15 +22,10 @@ dp = Dispatcher(storage)
 async def marisa_eyes():
     is_times = await time_watcher()
     if is_times:
-        a = datetime.strptime(is_times.strftime('%H:%M'), '%H:%M')
-        one_time = (a + timedelta(hours=12)).time()
-        two_time = a.time()
-        while True:
-            time = datetime.strptime(datetime.now().time().strftime('%H:%M'), '%H:%M').time()
-            if time == one_time or time == two_time:
-                await main_hand.marisa_awaikens(None, bot)
-                await asyncio.sleep(120)
-            await asyncio.sleep(0.5)
+        cron_concern_time = is_times.strftime('* %H/2 * * *')
+        scheduler = AsyncIOScheduler(timezone=pytz.timezone("Europe/Moscow"))
+        scheduler.add_job(WitchyMood().witch_concern, CronTrigger.from_crontab(cron_concern_time), [bot])
+        scheduler.start()
     else:
         witch_log.warning('There is no records in table, sleep for 1h')
         await asyncio.sleep(3600)
@@ -36,8 +34,10 @@ async def marisa_eyes():
 async def main():
     bot_info = await bot.get_me()
     print(f"Hello, i'm {bot_info.first_name} | {bot_info.username}")
+
     dp.include_router(main_hand.router)
     dp.include_router(conv_hand.router)
+    dp.include_router(free_speach_hand.router)
     asyncio.create_task(marisa_eyes())
     session = aiohttp.ClientSession()
     await session.close()
@@ -46,4 +46,5 @@ async def main():
 
 
 if __name__ == "__main__":
+    warnings.simplefilter('ignore')
     asyncio.run(main())
