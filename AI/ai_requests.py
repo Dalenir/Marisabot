@@ -75,5 +75,6 @@ async def ai_sentient_witch(new_text: str, user_id: int):
         method='post'
     )
     real_answer = res.get('choices')[0].get("message").get("content")
-    await redis_add_to_list(redis_key, pickle.dumps(AIMessage(role="assistant", content=new_text)))
+    await redis_add_to_list(redis_key, pickle.dumps(AIMessage(role="user", content=new_text)))
+    await redis_add_to_list(redis_key, pickle.dumps(AIMessage(role="assistant", content=real_answer)))
     return real_answer
