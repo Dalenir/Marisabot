@@ -38,7 +38,7 @@ async def main():
     dp.include_router(main_hand.router)
     dp.include_router(conv_hand.router)
     dp.include_router(free_speach_hand.router)
-    asyncio.create_task(marisa_eyes())
+    # asyncio.create_task(marisa_eyes())
     session = aiohttp.ClientSession()
     await session.close()
     await bot.delete_webhook(drop_pending_updates=True)
