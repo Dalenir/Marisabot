@@ -18,18 +18,22 @@ all_points = (1, 2, 3, -1, -2, -3)
 
 @router.message(commands=['start'])
 async def commands_start(message: types.Message, state: FSMContext):
-    if await state.get_state() == 'MarisaStates:sleepmode':
-        return
-    await state.set_state(MarisaStates.start)
-    await message.answer('Здравствуй! С этого момента я каждый день буду дважды спрашивать'
-                         ' тебя о том, как у тебя дела!')
-    await asyncio.sleep(3)
-    nmarkup = ReplyKeyboardBuilder()
-    nmarkup.add(types.KeyboardButton(text='А ты точно Мариса?'))
-    await message.answer('Пожалуйста, не блокируй меня, и не злись, а просто нажимай на одну из кнопок — это '
-                         'весь фидбек, который я прошу, и который могу принимать. Возможно, некая ленивая жопа допилит '
-                         'меня чуть лучше, но пока что он предвкушает возню с базами данных, и поэтому решает не '
-                         'расширять функционал.\n\nДавай потренируемся?', reply_markup=nmarkup.as_markup())
+
+    await message.answer("(o-<)")
+
+
+    # if await state.get_state() == 'MarisaStates:sleepmode':
+    #     return
+    # await state.set_state(MarisaStates.start)
+    # await message.answer('Здравствуй! С этого момента я каждый день буду дважды спрашивать'
+    #                      ' тебя о том, как у тебя дела!')
+    # await asyncio.sleep(3)
+    # nmarkup = ReplyKeyboardBuilder()
+    # nmarkup.add(types.KeyboardButton(text='А ты точно Мариса?'))
+    # await message.answer('Пожалуйста, не блокируй меня, и не злись, а просто нажимай на одну из кнопок — это '
+    #                      'весь фидбек, который я прошу, и который могу принимать. Возможно, некая ленивая жопа допилит '
+    #                      'меня чуть лучше, но пока что он предвкушает возню с базами данных, и поэтому решает не '
+    #                      'расширять функционал.\n\nДавай потренируемся?', reply_markup=nmarkup.as_markup())
 
 
 @router.message(F.text == 'А ты точно Мариса?')
