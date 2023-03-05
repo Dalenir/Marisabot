@@ -72,11 +72,8 @@ async def afterward_tuning(messages: list[AIMessage],
     messages.append(assistant_message)
     while num_tokens_from_messages(messages) > 3250:
         messages.pop(2)
-    await redis_add_to_list(redis_key, pickle.dumps(user_message))
-    await redis_add_to_list(redis_key, pickle.dumps(assistant_message))
-
-
-
+    for message in messages:
+        await redis_add_to_list(redis_key, pickle.dumps(message))
 
 
 async def ai_sentient_witch(new_text: str, user_id: int):
