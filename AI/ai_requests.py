@@ -1,11 +1,13 @@
+import datetime
 import json
 import os
 import pickle
 from json import JSONDecodeError
 from typing import TypedDict
 
+import asyncio
 from aiogram.client.session import aiohttp
-
+import tiktoken
 from DBs.DBuse import redis_list, redis_add_to_list
 from Marisa import data
 
@@ -39,9 +41,42 @@ async def make_request(url: str, method: str, headers, data=None):
                     print('There is no response')
                     return None
 
+
+def num_tokens_from_messages(messages):
+    """Returns the number of tokens used by a list of messages."""
+    try:
+        encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    except KeyError:
+        encoding = tiktoken.get_encoding("cl100k_base")
+    num_tokens = 0
+    for message in messages:
+        num_tokens += 4  # every message follows <im_start>{role/name}\n{content}<im_end>\n
+        for key, value in message.items():
+            num_tokens += len(encoding.encode(value))
+            if key == "name":  # if there's a name, the role is omitted
+                num_tokens += -1  # role is always required and always 1 token
+    num_tokens += 2  # every reply is primed with <im_start>assistant
+    return num_tokens
+
+
 class AIMessage(TypedDict):
     role: str
     content: str
+
+
+async def afterward_tuning(messages: list[AIMessage],
+                           user_message: AIMessage,
+                           assistant_message: AIMessage,
+                           redis_key: str):
+    messages.append(user_message)
+    messages.append(assistant_message)
+    while num_tokens_from_messages(messages) > 4050:
+        messages.pop(2)
+    await redis_add_to_list(redis_key, pickle.dumps(user_message))
+    await redis_add_to_list(redis_key, pickle.dumps(assistant_message))
+
+
+
 
 
 async def ai_sentient_witch(new_text: str, user_id: int):
@@ -53,9 +88,14 @@ async def ai_sentient_witch(new_text: str, user_id: int):
             ai_message = pickle.loads(mess)
             old_messages.append(ai_message)
 
+    user_message = AIMessage(role="user", content=new_text)
+
     messages = [AIMessage(role="system", content=base_ai_rules)]
     messages.extend(old_messages[::-1])
-    messages.append(AIMessage(role="user", content=new_text))
+    messages.append(user_message)
+
+    while num_tokens_from_messages(messages) > 4050:
+        messages.pop(2)
 
     res = await make_request(
         "https://api.openai.com/v1/chat/completions",
@@ -76,6 +116,8 @@ async def ai_sentient_witch(new_text: str, user_id: int):
     )
     print(user_id, res.get('usage'))
     real_answer = res.get('choices')[0].get("message").get("content")
-    await redis_add_to_list(redis_key, pickle.dumps(AIMessage(role="user", content=new_text)))
-    await redis_add_to_list(redis_key, pickle.dumps(AIMessage(role="assistant", content=real_answer)))
+    await asyncio.gather(afterward_tuning(messages,
+                                 user_message=user_message,
+                                 assistant_message=AIMessage(role='assistant', content=real_answer),
+                                 redis_key=redis_key))
     return real_answer
