@@ -118,9 +118,13 @@ async def ai_sentient_witch(new_text: str, user_id: int):
         method='post'
     )
     print(user_id, res.get('usage'))
-    real_answer = res.get('choices')[0].get("message").get("content")
-    await asyncio.gather(afterward_tuning(messages,
-                                 user_message=user_message,
-                                 assistant_message=AIMessage(role='assistant', content=real_answer),
-                                 redis_key=redis_key))
-    return real_answer
+    try:
+        real_answer = res.get('choices')[0].get("message").get("content")
+        await asyncio.gather(afterward_tuning(messages,
+                                     user_message=user_message,
+                                     assistant_message=AIMessage(role='assistant', content=real_answer),
+                                     redis_key=redis_key))
+        return real_answer
+    except TypeError:
+        print(res)
+        return "<b>Sleepy witch problem!</b>"
