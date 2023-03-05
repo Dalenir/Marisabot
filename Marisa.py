@@ -7,6 +7,7 @@ from aiogram.dispatcher.fsm.storage.redis import RedisStorage
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
+from AllLogs.bot_logger import main_logger
 from DBs.DBuse import time_watcher
 from bata import AllData
 from functions.daily_mood import WitchyMood
@@ -32,6 +33,8 @@ async def marisa_eyes():
 
 
 async def main():
+    main_logger.infolog.info('Logger is ready!')
+
     bot_info = await bot.get_me()
     print(f"Hello, i'm {bot_info.first_name} | {bot_info.username}")
 
