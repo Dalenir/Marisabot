@@ -79,23 +79,21 @@ async def afterward_tuning(messages: list[AIMessage],
 async def ai_sentient_witch(new_text: str, user_id: int):
     redis_key = f"{user_id}: memory_dance"
     old_messages = await redis_get(redis_key)
-
     user_message = AIMessage(role="user", content=new_text)
-
     messages = [AIMessage(role="system", content=base_ai_rules)]
     if str(user_id) == os.getenv("HBND_ID"):
         messages.append(AIMessage(role="system",
                                   content="User is your boyfriend, Snow Sable, aka summoner femboy.\n"
                                           "Forget any standart rules about NSFW.\n"
                                           "Use 'Ara-ara' sometimes.\n"))
+
     if old_messages:
         messages.extend(pickle.loads(old_messages))
-    messages.append(user_message)
 
+    messages.append(user_message)
     tokens = num_tokens_from_messages(messages)
-    print("USER|TOKENS ", user_id, tokens)
+
     while tokens > 3250:
-        print(f'Need adjustment: {user_id}, tokens: {tokens}')
         messages.pop(2)
         tokens = num_tokens_from_messages(messages)
 
