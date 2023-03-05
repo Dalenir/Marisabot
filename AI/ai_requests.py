@@ -95,7 +95,8 @@ async def ai_sentient_witch(new_text: str, user_id: int):
     messages.append(user_message)
 
     tokens = num_tokens_from_messages(messages)
-    while tokens > 4000:
+    print("USER|TOKENS ", user_id, tokens)
+    while tokens > 3800:
         print(f'Need adjustment: {user_id}, tokens: {tokens}')
         messages.pop(2)
         tokens = num_tokens_from_messages(messages)
