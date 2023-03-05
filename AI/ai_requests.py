@@ -94,8 +94,11 @@ async def ai_sentient_witch(new_text: str, user_id: int):
     messages.extend(old_messages[::-1])
     messages.append(user_message)
 
-    while num_tokens_from_messages(messages) > 4050:
+    tokens = num_tokens_from_messages(messages)
+    while tokens > 4000:
+        print(f'Need adjustment: {user_id}, tokens: {tokens}')
         messages.pop(2)
+        tokens = num_tokens_from_messages(messages)
 
     res = await make_request(
         "https://api.openai.com/v1/chat/completions",
