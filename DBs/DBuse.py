@@ -61,6 +61,12 @@ async def redis_set(key, value):
     except Exception as error:
         await witch_error(error, __file__)
 
+async def redis_del(key):
+    try:
+        return AllData().get_data_red().delete(key)
+    except Exception as error:
+        await witch_error(error, __file__)
+
 
 class BadGuest(Exception):
     def __init__(self, error_text):

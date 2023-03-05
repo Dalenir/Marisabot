@@ -8,7 +8,7 @@ from typing import TypedDict
 import asyncio
 from aiogram.client.session import aiohttp
 import tiktoken
-from DBs.DBuse import redis_list, redis_add_to_list
+from DBs.DBuse import redis_list, redis_add_to_list, redis_del
 from Marisa import data
 
 with open('AI/ai_settings') as f:
@@ -72,6 +72,7 @@ async def afterward_tuning(messages: list[AIMessage],
     messages.append(assistant_message)
     while num_tokens_from_messages(messages) > 3250:
         messages.pop(2)
+    await redis_del(redis_key)
     for message in messages:
         await redis_add_to_list(redis_key, pickle.dumps(message))
 
