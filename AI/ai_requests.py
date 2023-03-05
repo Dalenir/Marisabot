@@ -56,6 +56,7 @@ async def ai_sentient_witch(new_text: str, user_id: int):
     messages = [AIMessage(role="system", content=base_ai_rules)]
     messages.extend(old_messages[::-1])
     messages.append(AIMessage(role="user", content=new_text))
+    print(len(messages))
 
     res = await make_request(
         "https://api.openai.com/v1/chat/completions",
@@ -74,6 +75,7 @@ async def ai_sentient_witch(new_text: str, user_id: int):
         }),
         method='post'
     )
+    print(res)
     real_answer = res.get('choices')[0].get("message").get("content")
     await redis_add_to_list(redis_key, pickle.dumps(AIMessage(role="user", content=new_text)))
     await redis_add_to_list(redis_key, pickle.dumps(AIMessage(role="assistant", content=real_answer)))
