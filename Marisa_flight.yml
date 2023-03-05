@@ -32,7 +32,7 @@ services:
     container_name: Witch_garden
     ports:
       - "2169:2769"
-    command: --port 2769
+    command: redis-server --requirepass ${RED_PASS:?RED_PASS variable is not set} --save 20 1 --loglevel warning --port 2769
     volumes:
       - ./databases/redis/data:/data
     networks:
