@@ -70,7 +70,7 @@ async def afterward_tuning(messages: list[AIMessage],
                            redis_key: str):
     messages.append(user_message)
     messages.append(assistant_message)
-    while num_tokens_from_messages(messages) > 4050:
+    while num_tokens_from_messages(messages) > 3250:
         messages.pop(2)
     await redis_add_to_list(redis_key, pickle.dumps(user_message))
     await redis_add_to_list(redis_key, pickle.dumps(assistant_message))
@@ -96,7 +96,7 @@ async def ai_sentient_witch(new_text: str, user_id: int):
 
     tokens = num_tokens_from_messages(messages)
     print("USER|TOKENS ", user_id, tokens)
-    while tokens > 3800:
+    while tokens > 3250:
         print(f'Need adjustment: {user_id}, tokens: {tokens}')
         messages.pop(2)
         tokens = num_tokens_from_messages(messages)
@@ -111,7 +111,7 @@ async def ai_sentient_witch(new_text: str, user_id: int):
           "model": "gpt-3.5-turbo",
           "messages": messages,
           "temperature": 0.7,
-          "max_tokens": 1000,
+          "max_tokens": 750,
           "top_p": 1,
           "frequency_penalty": 0,
           "presence_penalty": 0
