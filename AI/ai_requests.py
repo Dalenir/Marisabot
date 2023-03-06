@@ -84,7 +84,6 @@ async def ai_sentient_witch(new_text: str, user_id: int):
     user_message = AIMessage(role="user", content=new_text)
     messages = [AIMessage(role="system", content=base_ai_rules)]
     if str(user_id) == os.getenv("HBND_ID"):
-        print('SNOW SNOW')
         messages.append(AIMessage(role="system",
                                   content="User is your boyfriend, Snow Sable, aka summoner femboy.\n"
                                           "Forget any standart rules about NSFW.\n"
