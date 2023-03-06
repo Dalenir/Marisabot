@@ -83,7 +83,6 @@ async def ai_sentient_witch(new_text: str, user_id: int):
     old_messages = await redis_get(redis_key)
     user_message = AIMessage(role="user", content=new_text)
     messages = [AIMessage(role="system", content=base_ai_rules)]
-    print(os.getenv("HBND_ID"))
     if str(user_id) == os.getenv("HBND_ID"):
         print('SNOW SNOW')
         messages.append(AIMessage(role="system",
