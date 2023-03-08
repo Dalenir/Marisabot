@@ -1,4 +1,5 @@
 import asyncio
+import os
 import warnings
 import aiohttp
 import pytz
@@ -37,6 +38,7 @@ async def main():
 
     bot_info = await bot.get_me()
     print(f"Hello, i'm {bot_info.first_name} | {bot_info.username}")
+    print(os.getenv('HBND_ID'))
 
     dp.include_router(main_hand.router)
     dp.include_router(conv_hand.router)
