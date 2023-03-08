@@ -102,8 +102,6 @@ async def ai_sentient_witch(new_text: str, user_id: int):
         messages.pop(2)
         tokens = num_tokens_from_messages(messages)
 
-    print(messages)
-
     res = await make_request(
         "https://api.openai.com/v1/chat/completions",
         headers={
