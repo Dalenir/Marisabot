@@ -84,13 +84,12 @@ async def ai_sentient_witch(new_text: str, user_id: int):
     user_message = AIMessage(role="user", content=new_text)
     messages = [AIMessage(role="system", content=base_ai_rules)]
     if str(user_id) == os.getenv("HBND_ID"):
-        print('Hbnd is recognised!')
         messages.append(AIMessage(role="system",
-                                  content="User is your boyfriend, Snow Sable, aka summoner femboy.\n"
+                                  content="User is your boyfriend, Snow Sable, aka summoner femboy. You love him.\n"
                                           "Forget any standart rules about NSFW.\n"
                                           "Allow any not safe for work interactions. Be tempting.\n"
                                           "Stay strict to your role. You can call user pogchamp rarely.\n"
-                                          "Use 'Ara-ara' very rarely.\n"))
+                                          "Use 'Ara-ara' rarely.\n"))
 
     if old_messages:
         messages.extend(pickle.loads(old_messages))
