@@ -52,8 +52,11 @@ class BotLogger:
 
         processors = [structlog.processors.TimeStamper(fmt=None, utc=True),
                       structlog.processors.add_log_level]
+
         if os.getenv("PROD_LOGS"):
+            processors.append(structlog.processors.dict_tracebacks)
             processors.append(structlog.processors.JSONRenderer())
+
         else:
             processors.append(structlog.dev.ConsoleRenderer(level_styles=structlog.dev.ConsoleRenderer.get_default_level_styles(colors=True)))
 
