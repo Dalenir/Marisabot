@@ -20,7 +20,6 @@ bot = data.get_bot()
 storage = RedisStorage.from_url(data.redis_url)
 dp = Dispatcher(storage)
 
-
 async def marisa_eyes():
     is_times = await time_watcher()
     if is_times:

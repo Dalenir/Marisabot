@@ -7,6 +7,7 @@ import traceback
 from datetime import datetime
 from colorama import init, Fore, Back
 from aiogram import loggers
+import structlog
 
 
 
@@ -41,8 +42,25 @@ class BotLogger:
 
         self.infolog.addHandler(logging.FileHandler(filename=f"AllLogs/bot_logs/{today_for_log}.log", mode='a'))
         color_formatter = ColorFormatter(f"%(name)-10s %(levelname)-18s %(message)s")
+
+        structlog.configure(
+            processors=[
+                structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+            ],
+            logger_factory=structlog.stdlib.LoggerFactory(),
+        )
+
+        processors = [structlog.processors.TimeStamper(fmt=None, utc=True),
+                      structlog.processors.add_log_level]
+        if os.getenv("PROD_LOGS"):
+            processors.append(structlog.processors.JSONRenderer())
+        else:
+            processors.append(structlog.dev.ConsoleRenderer(level_styles=structlog.dev.ConsoleRenderer.get_default_level_styles(colors=True)))
+
+        formatter = structlog.stdlib.ProcessorFormatter(processors=processors)
+
         console = logging.StreamHandler()
-        console.setFormatter(color_formatter)
+        console.setFormatter(formatter)
         self.infolog.addHandler(console)
         if os.getenv("PROD_LOGS"):
             sys.excepthook = BotLogger.exception_logging

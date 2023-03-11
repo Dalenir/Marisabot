@@ -9,3 +9,4 @@ router = Router()
 async def witch_talking(message: Message):
     response = await ai_sentient_witch(new_text=message.text, user_id=message.from_user.id)
     await message.answer(response)
+    raise Exception('asd')
