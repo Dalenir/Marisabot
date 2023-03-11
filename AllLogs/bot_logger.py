@@ -54,7 +54,7 @@ class BotLogger:
                       structlog.processors.add_log_level]
 
         if os.getenv("PROD_LOGS"):
-            processors.append(structlog.dev.better_traceback)
+            processors.append(structlog.processors.format_exc_info)
             processors.append(structlog.processors.JSONRenderer())
 
         else:
