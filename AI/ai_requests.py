@@ -83,6 +83,7 @@ async def ai_sentient_witch(new_text: str, user_id: int):
     old_messages = await redis_get(redis_key)
     user_message = AIMessage(role="user", content=new_text)
     messages = [AIMessage(role="system", content=base_ai_rules)]
+    print('Ara\nAra')
     if str(user_id) == os.getenv("HBND_ID"):
         messages.append(AIMessage(role="system",
                                   content="User is your boyfriend, Snow Sable, aka summoner femboy. You love him.\n"
@@ -129,3 +130,4 @@ async def ai_sentient_witch(new_text: str, user_id: int):
     except TypeError:
         print(res)
         return "<b>Sleepy witch problem!</b>"
+
