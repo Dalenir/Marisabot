@@ -10,7 +10,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from AllLogs.bot_logger import main_logger
 from DBs.DBuse import time_watcher
-from bata import AllData, get_settings, settings
+from bata import AllData, settings
 from functions.daily_mood import WitchyMood
 from handlers import main_hand, conv_hand, free_speach_hand
 from marisa_log.scribe import witch_log
@@ -37,8 +37,6 @@ async def main():
 
     bot_info = await bot.get_me()
     print(f"Hello, i'm {bot_info.first_name} | {bot_info.username}")
-    print(os.getenv("AI_FULL_LIMIT"))
-    print(settings.AI_IN_LIMIT)
 
     dp.include_router(main_hand.router)
     dp.include_router(conv_hand.router)
