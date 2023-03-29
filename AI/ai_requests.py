@@ -113,7 +113,7 @@ async def ai_sentient_witch(new_text: str, user_id: int):
           "model": "gpt-4",
           "messages": messages,
           "temperature": 0.7,
-          "max_tokens": 1000,
+          "max_tokens": settings.AI_OUT_LIMIT,
           "top_p": 1,
           "frequency_penalty": 0,
           "presence_penalty": 0
