@@ -38,6 +38,7 @@ class NormalSettings(BaseSettings):
 
     @validator("AI_IN_LIMIT", always=True)
     def create_in(cls, value, values):
+        print(values)
         return values["AI_FULL_LIMIT"] - values["AI_OUT_LIMIT"]
 
 
