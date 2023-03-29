@@ -37,6 +37,7 @@ async def main():
 
     bot_info = await bot.get_me()
     print(f"Hello, i'm {bot_info.first_name} | {bot_info.username}")
+    print(os.getenv("AI_FULL_LIMIT"))
     print(settings.AI_IN_LIMIT)
 
     dp.include_router(main_hand.router)
