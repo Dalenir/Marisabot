@@ -1,7 +1,9 @@
 import os
+from functools import lru_cache
 
 import psycopg2
 from aiogram import Bot
+from pydantic import BaseSettings, validator
 from redis import from_url
 
 
@@ -27,3 +29,20 @@ class AllData:
     @staticmethod
     def get_data_red():
         return from_url(f'redis://:{os.getenv("RED_PASS")}@Witch_garden:2769/1', decode_responses=False)
+
+
+class NormalSettings(BaseSettings):
+    AI_FULL_LIMIT: int
+    AI_OUT_LIMIT: int
+    AI_IN_LIMIT: int = None
+
+    @validator("AI_IN_LIMIT", always=True)
+    def create_in(cls, value, values):
+        return values["AI_FULL_LIMIT"] - values["AI_OUT_LIMIT"]
+
+
+@lru_cache()
+def get_settings():
+    return NormalSettings()
+
+settings = get_settings()
